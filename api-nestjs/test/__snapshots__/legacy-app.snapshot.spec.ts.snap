@@ -1,0 +1,99 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Teste Rotas do App Legado > Deve corresponder ao snapshot das rotas legadas 1`] = `
+[
+  {
+    "methods": "get",
+    "path": "/api/products",
+  },
+  {
+    "methods": "post",
+    "path": "/api/product",
+  },
+  {
+    "methods": "put",
+    "path": "/api/product",
+  },
+]
+`;
+
+exports[`Teste Rotas do App Legado > Deve corresponder ao snapshot dos middlewares legados 1`] = `
+[
+  "query",
+  "expressInit",
+  "jsonParser",
+  "router",
+]
+`;
+
+exports[`Teste de hash geral > Deve corresponder ao snapshot de hash de todos os arquivos legados geral 1`] = `
+[
+  {
+    "filePath": "app.js",
+    "hash": "1e6563bccd7fcc6792225e70cf2b5a5cb41ada91264541336c2a1155df3659a7",
+  },
+  {
+    "filePath": "routes.js",
+    "hash": "da5d85d7f3fa987b6675dd2964daf95d9552b214cd2f9f4bd9e2c69385f1be5a",
+  },
+  {
+    "filePath": "server.js",
+    "hash": "d364995d2ebf715d6338ffd8a14e5378fb18104cf7f64fce24f985139780cea6",
+  },
+]
+`;
+
+exports[`Teste de hash individual > Deve corresponder ao snapshot de hash dos arquivos legados 1`] = `
+[
+  {
+    "filePath": "/Users/suporte2/Documents/express-nestjs-adapter-demo/nest-express/src/routes.js",
+    "hash": "da5d85d7f3fa987b6675dd2964daf95d9552b214cd2f9f4bd9e2c69385f1be5a",
+  },
+  {
+    "filePath": "/Users/suporte2/Documents/express-nestjs-adapter-demo/nest-express/src/app.js",
+    "hash": "1e6563bccd7fcc6792225e70cf2b5a5cb41ada91264541336c2a1155df3659a7",
+  },
+]
+`;
+
+exports[`Testes Unitários - Rotas do Legado > GET /products > Deve retornar todos os produtos 1`] = `
+{
+  "message": "Retorna todos produtos",
+}
+`;
+
+exports[`Testes Unitários - Rotas do Legado > POST /product > Deve retornar a mensagem de falha ao criar um produto com input diferente de "sim" 1`] = `
+{
+  "message": "nao entrou na condicao da criacao do produto",
+}
+`;
+
+exports[`Testes Unitários - Rotas do Legado > POST /product > Deve retornar a mensagem de sucesso ao criar um produto com input "sim" 1`] = `
+{
+  "message": "entrou na condicao da criacao do produto",
+}
+`;
+
+exports[`Testes Unitários - Rotas do Legado > PUT /product > Deve retornar que nenhum produto foi encontrado 1`] = `
+{
+  "status": "nao achou nenhum produto",
+}
+`;
+
+exports[`Testes Unitários - Rotas do Legado > PUT /product > Deve retornar que o produto 87 foi atualizado 1`] = `
+{
+  "message": "o produto 87 foi atualizado",
+}
+`;
+
+exports[`Testes Unitários - Rotas do Legado > PUT /product > Deve retornar que o produto 98 foi atualizado 1`] = `
+{
+  "message": "o produto 98 foi atualizado",
+}
+`;
+
+exports[`Testes Unitários - Rotas do Legado > PUT /product > Deve retornar que o produto 100 foi atualizado 1`] = `
+{
+  "message": "o produto 100 foi atualizado",
+}
+`;
