@@ -4,7 +4,7 @@ import * as path from 'path';
 
 const express = require('express');
 const request = require('supertest');
-const legacyApp = require('../../nest-express/src/app'); // Caminho para o arquivo legado
+const legacyApp = require('../../api-legacy/src/app'); // Caminho para o arquivo legado
 
 // testes para verificar mudancas em arquivos individuais ele verifica por tamanho de hash
 describe('Teste de hash individual', () => {
@@ -15,8 +15,8 @@ describe('Teste de hash individual', () => {
 
   it('Deve corresponder ao snapshot de hash dos arquivos legados', () => {
     const filesToCheck = [
-      path.join(__dirname, '../../nest-express/src/routes.js'),
-      path.join(__dirname, '../../nest-express/src/app.js'),
+      path.join(__dirname, '../../api-legacy/src/routes.js'),
+      path.join(__dirname, '../../api-legacy/src/app.js'),
     ];
 
     const hashes = filesToCheck.map((filePath) => ({
@@ -110,7 +110,7 @@ describe('Teste de hash geral', () => {
   };
 
   it('Deve corresponder ao snapshot de hash de todos os arquivos legados geral', () => {
-    const legacyDir = path.join(__dirname, '../../nest-express/src');
+    const legacyDir = path.join(__dirname, '../../api-legacy/src');
     const files = getAllFiles(legacyDir);
 
     const hashes = files.map((filePath) => ({
