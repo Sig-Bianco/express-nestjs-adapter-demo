@@ -11,8 +11,8 @@ describe('Teste de hash individual', () => {
 
   it('Deve corresponder ao snapshot de hash dos arquivos legados', () => {
     const filesToCheck = [
-      path.join(__dirname, '../../../api-legacy/src/routes.js'),
-      path.join(__dirname, '../../../api-legacy/src/app.js'),
+      path.join(__dirname, '../../src/api-legacy/src/routes.js'),
+      path.join(__dirname, '../../src/api-legacy/src/app.js'),
     ];
 
     const hashes = filesToCheck.map((filePath) => ({
@@ -47,7 +47,7 @@ describe('Teste de hash geral', () => {
   };
 
   it('Deve corresponder ao snapshot de hash de todos os arquivos legados geral', () => {
-    const legacyDir = path.join(__dirname, '../../../api-legacy/src');
+    const legacyDir = path.join(__dirname, '../../src/api-legacy/src');
     const files = getAllFiles(legacyDir);
 
     const hashes = files.map((filePath) => ({

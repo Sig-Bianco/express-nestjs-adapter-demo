@@ -1,6 +1,6 @@
 import * as path from 'path';
 
-const legacyApp = require('../../../api-legacy/src/app'); // Caminho para o arquivo legado
+const legacyApp = require('../../src/api-legacy/src/app'); // Caminho para o arquivo legado
 
 
 // teste para verificar se houve mudanca nas rotas ou middlewares do legado

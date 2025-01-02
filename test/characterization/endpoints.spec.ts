@@ -149,7 +149,7 @@ describe('Testes Unitários - Rotas do Legado com Mocks', () => {
   });
 
   const setup = async () => {
-    appService = require('../../../api-legacy/src/appService'); // Certifique-se de que está apontando para o módulo correto
+    appService = require('../../src/api-legacy/src/appService'); // Certifique-se de que está apontando para o módulo correto
     mockRequest = {};
     mockResponse = {
       status: vi.fn().mockReturnThis(),
