@@ -1,0 +1,10 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Teste Rotas do App Legado > Deve corresponder ao snapshot dos middlewares legados 1`] = `
+[
+  "query",
+  "expressInit",
+  "jsonParser",
+  "router",
+]
+`;

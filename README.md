@@ -1,7 +1,7 @@
 
-# Express Adapter Demo
+# Integrando NestJS com API Legada (Express)
 
-Este projeto demonstra como integrar um aplicativo legado em **Express** com uma aplicação moderna em **NestJS**. 
+Este guia é destinado a desenvolvedores que querem integrar um sistema legado, baseado em **Express**, com uma aplicação moderna **NestJS**. O processo é simples e consiste em algumas etapas principais.
 
 ## 📋 Pré-requisitos
 
@@ -10,67 +10,177 @@ Certifique-se de ter as seguintes ferramentas instaladas:
 - Node.js (versão 16+ recomendada)
 - npm ou yarn
 
-## 🚀 Como Usar
+## 🛠 Passo a Passo
 
-### 1. Clone o Repositório
+### 1. Estrutura Inicial
 
-```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd express-nestjs-adapter-demo
+Primeiro, crie duas pastas no seu projeto: uma para a aplicação **NestJS** e outra para a API **legada (Express)**. A estrutura do diretório pode ser parecida com esta:
+
+```
+meu-projeto/
+├── api-legacy/          # Código da API legada em Express
+├── api-nestjs/          # Código da aplicação NestJS
 ```
 
-### 2. Instale as Dependências
+### 2. Configure a API Legada (Express)
 
-```bash
-npm install
+Dentro da pasta `api-legacy`, adicione o código da sua aplicação Express. Por exemplo:
+
+```javascript
+// api-legacy/src/app.js
+const express = require('express');
+const app = express();
+
+app.get('/products', (req, res) => {
+  res.json({ message: 'Lista de produtos' });
+});
+
+module.exports = app;
 ```
 
-### 3. Configuração da Integração
+### 3. Configuração do NestJS
 
-O aplicativo legado em Express está localizado em `api-legacy/src/app.js`. Ele expõe algumas rotas como `/products` e `/product`. Para usá-lo em conjunto com o NestJS:
+Agora, dentro da pasta `api-nestjs`, crie a aplicação **NestJS**. A principal configuração será a integração com o Express usando o adaptador.
 
-#### No NestJS:
-
-1. **Importe a aplicação legado no `main.ts`:**
+#### 3.1. No `main.ts`, importe o adaptador Express
 
 ```typescript
-import * as legacyApp from '../api-legacy/src/app';
+// api-nestjs/src/main.ts
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import * as expressApp from '../../api-legacy/src/app'; // Caminho da sua API legada
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // Integração com o aplicativo legado
-  app.use(legacyApp);
+  // Integração com o Express (API Legada)
+  app.use('/api', expressApp);  // Use o Express sob a rota '/api'
 
   await app.listen(3000);
 }
+
 bootstrap();
 ```
 
-2. As rotas do legado estarão disponíveis sob `/api` no NestJS.
+#### 3.2. Rodando a Aplicação
 
-### 4. Rodando o Servidor
-
-Inicie o servidor com o comando:
+Para rodar sua aplicação, execute:
 
 ```bash
 npm run start
 ```
 
-O NestJS estará rodando na porta padrão `3000`.
+A aplicação NestJS estará rodando na porta `3000` e você poderá acessar as rotas legadas sob `/api`.
 
-- Rotas do NestJS: `/`
-- Rotas do Express (legado): `/api/products`, `/api/product`, etc.
+- **Rotas do Express (legado)**: `/api/products`, etc.
+- **Rotas do NestJS**: Se houver, estarão disponíveis diretamente na raiz.
 
 ---
 
-## 🧪 Testes
+### 4. 🧪 Testes de Caracterização
+
+Testes de caracterização são úteis para documentar e verificar o comportamento atual de uma aplicação, especialmente em cenários de legado. Eles ajudam a capturar o estado existente do sistema antes de implementar alterações. Abaixo estão os testes implementados na aplicação.
+
+Na pasta `test/characterization/` crie uma estrutura parecida com essa.
+
+```
+test/
+├── characterization/
+│   └── endpoints.spec.ts  # Testes de unitários dos endpoints
+│   └── routes.spec.ts  # Testes para verificar mudanças em rotas
+│   └── middlewares.spec.ts  # Testes para verificar mudanças em middlewares
+│   └── file-size.spec.ts  # Testes para verificar mudanças no tamanho de arquivos
+```
+
+#### 4.1. Teste de Hash Geral
+
+Este teste verifica todas as alterações realizadas nos arquivos do sistema legado dentro do diretório `src`.
+
+```typescript
+// file-size.spec.ts
+it('Deve corresponder ao snapshot de hash de todos os arquivos legados geral', () => {
+  const legacyDir = path.join(__dirname, '../../api-legacy/src');
+  const files = getAllFiles(legacyDir);
+
+  const hashes = files.map((filePath) => ({
+    filePath: path.relative(legacyDir, filePath),
+    hash: getFileHash(filePath),
+  }));
+
+  expect(hashes).toMatchSnapshot();
+});
+```
+
+#### 4.2. Teste de Hash Individual
+
+Este teste verifica se os arquivos principais do sistema legado (`app.js` e `routes.js`) permanecem inalterados em termos de conteúdo. Ele utiliza um hash SHA-256 para garantir integridade.
+
+```typescript
+// file-size.spec.ts
+it('Deve corresponder ao snapshot de hash dos arquivos legados', () => {
+  const filesToCheck = [
+    path.join(__dirname, '../../api-legacy/src/routes.js'),
+    path.join(__dirname, '../../api-legacy/src/app.js'),
+  ];
+
+  const hashes = filesToCheck.map((filePath) => ({
+    filePath,
+    hash: getFileHash(filePath),
+  }));
+
+  expect(hashes).toMatchSnapshot();
+});
+```
+
+#### 4.3. Testes de Rotas e Middlewares do Legado
+
+Além de capturar o comportamento das rotas, esses testes verificam a integridade das rotas e middlewares do sistema legado.
+
+```typescript
+// routes.ts
+it('Deve corresponder ao snapshot das rotas legadas', () => {
+  const routes = getExpressRoutes(legacyApp);
+  expect(routes).toMatchSnapshot();
+});
+```
+
+```typescript
+// middlewares.ts
+it('Deve corresponder ao snapshot dos middlewares legados', () => {
+  const middlewares = getExpressMiddlewares(legacyApp);
+  expect(middlewares).toMatchSnapshot();
+});
+```
+
+#### 4.4. Testes de retornos de rotas
+
+Este teste verifica o retorno de enpoints do legado e verifica se houve mudança no comportamento esperado.
+
+```typescript
+// endpoints.spec.ts
+it('Deve retornar os produtos', () => {
+    const originalGetProducts = appService.getProducts;
+
+    const spy = vi.spyOn(appService, 'getProducts').mockImplementation(() => {
+      return originalGetProducts.call(appService);
+    });
+
+    const getProductsHandler = (req, res) => {
+      const result = appService.getProducts();
+      res.status(200).json(result);
+    };
+
+    getProductsHandler(mockRequest, mockResponse);
+
+    expect(mockResponse.status).toHaveBeenCalledWith(200);
+    expect(mockResponse.json.mock.calls[0][0]).toMatchSnapshot();
+    expect(spy).toHaveBeenCalled();
+});
+```
+
+#### 4.5. 🧪 Rodando testes
 
 O projeto utiliza **Vitest** como framework de testes. Siga os passos para rodar os testes.
-
-### 1. Testando o Legado
-
-As rotas do legado possuem testes unitários em `test/legacy-app.spec.ts`.
 
 Rode os testes com:
 
@@ -78,7 +188,7 @@ Rode os testes com:
 npm run test
 ```
 
-### 2. Gerar Snapshot de Testes
+#### 4.6. Gerar Snapshot de Testes
 
 Para gerar novos snapshots após realizar mudanças no código legado ou nos arquivos relacionados, utilize o seguinte comando:
 
@@ -88,169 +198,38 @@ npm run test:snapshot
 
 Este comando deve ser utilizado **somente** após revisar cuidadosamente as mudanças para garantir que os novos snapshots reflitam as alterações desejadas.
 
----
 
-### 3. Ver Resultados dos Testes
+#### 4.7. Ver Resultados dos Testes
 
 Após rodar os testes, será exibido o resultado no terminal, incluindo informações sobre testes que passaram ou falharam.
-
-
-## Testes de Caracterização
-
-Testes de caracterização são úteis para documentar e verificar o comportamento atual de uma aplicação, especialmente em cenários de legado. Eles ajudam a capturar o estado existente do sistema antes de implementar alterações. Abaixo estão os testes implementados na aplicação.
-
-## Teste de Hash Individual
-
-Este teste verifica se os arquivos principais do sistema legado (`app.js` e `routes.js`) permanecem inalterados em termos de conteúdo. Ele utiliza um hash SHA-256 para garantir integridade.
-
-```typescript
-describe('Teste de hash individual', () => {
-  const getFileHash = (filePath: string) => {
-    const fileContent = fs.readFileSync(filePath, 'utf-8');
-    return crypto.createHash('sha256').update(fileContent).digest('hex');
-  };
-
-  it('Deve corresponder ao snapshot de hash dos arquivos legados', () => {
-    const filesToCheck = [
-      path.join(__dirname, '../../api-legacy/src/routes.js'),
-      path.join(__dirname, '../../api-legacy/src/app.js'),
-    ];
-
-    const hashes = filesToCheck.map((filePath) => ({
-      filePath,
-      hash: getFileHash(filePath),
-    }));
-
-    expect(hashes).toMatchSnapshot();
-  });
-});
-```
-
-## Testes Unitários das Rotas do Sistema Legado
-
-Estes testes validam as rotas existentes no sistema legado e garantem que os comportamentos esperados não mudem. As rotas testadas incluem:
-
-- **GET `/products`**: Retorna todos os produtos.
-- **POST `/product`**: Processa a criação de um produto com base no `input`.
-- **PUT `/product`**: Atualiza produtos específicos com base no `input`.
-
-### Exemplo de Teste para Rotas
-
-```typescript
-describe('Testes Unitários - Rotas do Legado', () => {
-  let app;
-
-  beforeAll(() => {
-    app = express();
-    app.use(express.json());
-    app.use(legacyApp);
-  });
-
-  describe('GET /products', () => {
-    it('Deve retornar todos os produtos', async () => {
-      const response = await request(app).get('/api/products');
-      expect(response.status).toBe(200);
-      expect(response.body).toMatchSnapshot();
-    });
-  });
-
-  describe('POST /product', () => {
-    it('Deve retornar a mensagem de sucesso ao criar um produto com input "sim"', async () => {
-      const response = await request(app).post('/api/product').send({ input: 'sim' });
-      expect(response.status).toBe(200);
-      expect(response.body).toMatchSnapshot();
-    });
-
-    it('Deve retornar a mensagem de falha ao criar um produto com input diferente de "sim"', async () => {
-      const response = await request(app).post('/api/product').send({ input: 'nao' });
-      expect(response.status).toBe(200);
-      expect(response.body).toMatchSnapshot();
-    });
-  });
-});
-```
-
-## Teste de Hash Geral
-
-Este teste verifica todas as alterações realizadas nos arquivos do sistema legado dentro do diretório `src`.
-
-```typescript
-describe('Teste de hash geral', () => {
-  const getFileHash = (filePath: string) => {
-    const fileContent = fs.readFileSync(filePath, 'utf-8');
-    return crypto.createHash('sha256').update(fileContent).digest('hex');
-  };
-
-  const getAllFiles = (dir: string, fileList: string[] = []) => {
-    const files = fs.readdirSync(dir);
-
-    files.forEach((file) => {
-      const fullPath = path.join(dir, file);
-      if (fs.statSync(fullPath).isDirectory()) {
-        getAllFiles(fullPath, fileList);
-      } else {
-        fileList.push(fullPath);
-      }
-    });
-
-    return fileList;
-  };
-
-  it('Deve corresponder ao snapshot de hash de todos os arquivos legados geral', () => {
-    const legacyDir = path.join(__dirname, '../../api-legacy/src');
-    const files = getAllFiles(legacyDir);
-
-    const hashes = files.map((filePath) => ({
-      filePath: path.relative(legacyDir, filePath),
-      hash: getFileHash(filePath),
-    }));
-
-    expect(hashes).toMatchSnapshot();
-  });
-});
-```
-
-## Testes de Rotas e Middlewares do Legado
-
-Além de capturar o comportamento das rotas, esses testes verificam a integridade das rotas e middlewares do sistema legado.
-
-### Exemplo de Testes
-
-```typescript
-describe('Teste Rotas do App Legado', () => {
-  it('Deve corresponder ao snapshot das rotas legadas', () => {
-    const routes = getExpressRoutes(legacyApp);
-    expect(routes).toMatchSnapshot();
-  });
-
-  it('Deve corresponder ao snapshot dos middlewares legados', () => {
-    const middlewares = getExpressMiddlewares(legacyApp);
-    expect(middlewares).toMatchSnapshot();
-  });
-});
-```
-
-## Conclusão
-
-Os testes de caracterização são uma parte essencial para manter a estabilidade do sistema legado, permitindo alterações com confiança e garantindo que o comportamento existente seja preservado.
-
 
 ---
 
 ## 📁 Estrutura de Diretórios
 
+A estrutura do projeto pode ser algo assim:
+
 ```
-express-nestjs-adapter-demo/
+meu-projeto/
 ├── api-legacy/
 │   ├── src/
-│   │   └── app.js        # Aplicação Express legado
+│   │   └── app.js        # Aplicação Express Legada
 ├── api-nestjs/
 │   ├── src/
-│   │   ├── app.controller.ts  # Controlador principal do NestJS
-│   │   ├── app.module.ts      # Módulo principal do NestJS
-│   │   └── main.ts            # Configuração inicial do NestJS
+│   │   └── app.controller.ts  # Controlador principal do NestJS
+│   │   └── app.module.ts      # Módulo principal do NestJS
+│   │   └── main.ts            # Configuração do NestJS
 ├── test/
-│   ├── legacy-app.spec.ts     # Testes unitários das rotas do legado
-├── package.json               # Configurações de scripts e dependências
+    ├── characterization/
+│       └── endpoints.spec.ts  # Testes de unitários dos endpoints
+│       └── routes.spec.ts  # Testes para verificar mudanças em rotas
+│       └── middlewares.spec.ts  # Testes para verificar mudanças em middlewares
+│       └── file-size.spec.ts  # Testes para verificar mudanças no tamanho de arquivos
+├── package.json               # Dependências e scripts
 ```
 
+---
+
+## 🚀 Conclusão
+
+Com esse processo, você integra uma API legada (Express) com uma aplicação moderna usando NestJS de forma simples e prática.

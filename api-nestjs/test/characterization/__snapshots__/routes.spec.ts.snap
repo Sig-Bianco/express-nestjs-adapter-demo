@@ -1,0 +1,18 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Teste Rotas do App Legado > Deve corresponder ao snapshot das rotas legadas 1`] = `
+[
+  {
+    "methods": "get",
+    "path": "/api/products",
+  },
+  {
+    "methods": "post",
+    "path": "/api/product",
+  },
+  {
+    "methods": "put",
+    "path": "/api/product",
+  },
+]
+`;

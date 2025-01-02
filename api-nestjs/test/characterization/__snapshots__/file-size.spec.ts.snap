@@ -1,0 +1,35 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Teste de hash geral > Deve corresponder ao snapshot de hash de todos os arquivos legados geral 1`] = `
+[
+  {
+    "filePath": "app.js",
+    "hash": "1e6563bccd7fcc6792225e70cf2b5a5cb41ada91264541336c2a1155df3659a7",
+  },
+  {
+    "filePath": "appService.js",
+    "hash": "933d094c217030d2a3deb18bfbe5c9c40c0fe04141fd6cb2f93a6cc924c9d957",
+  },
+  {
+    "filePath": "routes.js",
+    "hash": "639d14adf213eb35b59ec1c0e20321a889b1df95ce1362120b5a5f5f672ea645",
+  },
+  {
+    "filePath": "server.js",
+    "hash": "d364995d2ebf715d6338ffd8a14e5378fb18104cf7f64fce24f985139780cea6",
+  },
+]
+`;
+
+exports[`Teste de hash individual > Deve corresponder ao snapshot de hash dos arquivos legados 1`] = `
+[
+  {
+    "filePath": "/Users/suporte2/Downloads/express-nestjs-adapter-demo/api-legacy/src/routes.js",
+    "hash": "639d14adf213eb35b59ec1c0e20321a889b1df95ce1362120b5a5f5f672ea645",
+  },
+  {
+    "filePath": "/Users/suporte2/Downloads/express-nestjs-adapter-demo/api-legacy/src/app.js",
+    "hash": "1e6563bccd7fcc6792225e70cf2b5a5cb41ada91264541336c2a1155df3659a7",
+  },
+]
+`;
