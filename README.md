@@ -14,7 +14,7 @@ Certifique-se de ter as seguintes ferramentas instaladas:
 
 ### 1. Estrutura Inicial
 
-Primeiro, na sua aplicação **NestJS** dentro da pasta **src/** crie a sua api legada em usando **Express**, ficará parecido com essa estrutura abaixo:
+Primeiro, na sua aplicação **NestJS** dentro da pasta **src/** copie a sua api legada **Express**, ficará parecido com essa estrutura abaixo:
 
 ```
 
@@ -54,7 +54,7 @@ Agora, dentro da pasta `api-nestjs`, crie a aplicação **NestJS**. A principal 
 // api-nestjs/src/main.ts
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as expressApp from '../../api-legacy/src/app'; // Caminho da sua API legada
+import * as expressApp from 'api-legacy/src/app.js'; // Caminho da sua API legada
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
