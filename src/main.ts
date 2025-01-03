@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import * as express from 'express';
-import * as legacyApp from '/Users/suporte2/Downloads/express-nestjs-adapter-demo/src/api-legacy/src/app.js';
+import * as legacyApp from 'api-legacy/src/app.js';
 import { ExpressAdapter } from '@nestjs/platform-express';
 
 async function bootstrap() {
