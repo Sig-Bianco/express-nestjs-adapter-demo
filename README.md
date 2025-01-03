@@ -14,12 +14,18 @@ Certifique-se de ter as seguintes ferramentas instaladas:
 
 ### 1. Estrutura Inicial
 
-Primeiro, crie duas pastas no seu projeto: uma para a aplicação **NestJS** e outra para a API **legada (Express)**. A estrutura do diretório pode ser parecida com esta:
+Primeiro, na sua aplicação **NestJS** dentro da pasta **src/** crie a sua api legada em usando **Express**, ficará parecido com essa estrutura abaixo:
 
 ```
-meu-projeto/
-├── api-legacy/          # Código da API legada em Express
-├── api-nestjs/          # Código da aplicação NestJS
+
+├── api-nestjs/ # Código da aplicação NestJS
+│   ├── src/
+│   │   ├── api-legacy/ # Código da API legada em Express
+│   │   │   ├── src/
+│   │   │   │   └── app.js        # Aplicação Express Legada
+│   │   └── app.controller.ts  # Controlador principal do NestJS
+│   │   └── app.module.ts      # Módulo principal do NestJS
+│   │   └── main.ts             # Configuração do NestJS
 ```
 
 ### 2. Configure a API Legada (Express)
@@ -99,7 +105,7 @@ Este teste verifica todas as alterações realizadas nos arquivos do sistema leg
 ```typescript
 // file-size.spec.ts
 it('Deve corresponder ao snapshot de hash de todos os arquivos legados geral', () => {
-  const legacyDir = path.join(__dirname, '../../api-legacy/src');
+  const legacyDir = path.join(__dirname, '../../src/api-legacy/src/');
   const files = getAllFiles(legacyDir);
 
   const hashes = files.map((filePath) => ({
@@ -119,8 +125,8 @@ Este teste verifica se os arquivos principais do sistema legado (`app.js` e `rou
 // file-size.spec.ts
 it('Deve corresponder ao snapshot de hash dos arquivos legados', () => {
   const filesToCheck = [
-    path.join(__dirname, '../../api-legacy/src/routes.js'),
-    path.join(__dirname, '../../api-legacy/src/app.js'),
+    path.join(__dirname, '../../src/api-legacy/src/routes.js'),
+    path.join(__dirname, '../../src/api-legacy/src/app.js'),
   ];
 
   const hashes = filesToCheck.map((filePath) => ({
@@ -210,21 +216,23 @@ Após rodar os testes, será exibido o resultado no terminal, incluindo informa�
 A estrutura do projeto pode ser algo assim:
 
 ```
-meu-projeto/
-├── api-legacy/
-│   ├── src/
-│   │   └── app.js        # Aplicação Express Legada
 ├── api-nestjs/
 │   ├── src/
 │   │   └── app.controller.ts  # Controlador principal do NestJS
 │   │   └── app.module.ts      # Módulo principal do NestJS
-│   │   └── main.ts            # Configuração do NestJS
+│   │   └── main.ts             # Configuração do NestJS
+│   │   ├── api-legacy/
+│   │   │   ├── src/
+│   │   │   │   └── app.js        # Aplicação Express Legada
+│   │   │   │   └── app.controller.ts  # Controlador principal do NestJS
+│   │   │   │   └── app.module.ts      # Módulo principal do NestJS
+│   │   │   │   └── main.ts            # Configuração do NestJS
 ├── test/
-    ├── characterization/
-│       └── endpoints.spec.ts  # Testes de unitários dos endpoints
-│       └── routes.spec.ts  # Testes para verificar mudanças em rotas
-│       └── middlewares.spec.ts  # Testes para verificar mudanças em middlewares
-│       └── file-size.spec.ts  # Testes para verificar mudanças no tamanho de arquivos
+│   ├── characterization/
+│   │   └── endpoints.spec.ts  # Testes de unitários dos endpoints
+│   │   └── routes.spec.ts  # Testes para verificar mudanças em rotas
+│   │   └── middlewares.spec.ts  # Testes para verificar mudanças em middlewares
+│   │   └── file-size.spec.ts  # Testes para verificar mudanças no tamanho de arquivos
 ├── package.json               # Dependências e scripts
 ```
 
