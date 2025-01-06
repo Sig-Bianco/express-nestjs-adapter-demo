@@ -5,18 +5,13 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return 'Hello World!';
-  }
-
-  @Post('cats')
+  @Post('user')
   create(): string {
-    return 'Cria novos gatos';
+    return this.appService.createUser();
   }
 
-  @Get('cats')
+  @Get('users')
   findAll(): string {
-    return 'Retorna todos os gatos';
+    return this.appService.listUsers();
   }
 }
